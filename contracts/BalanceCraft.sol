@@ -11,7 +11,7 @@ import "@openzeppelin/contracts/utils/Base64.sol";
 /// @dev All function calls are currently implemented without side effects
 contract BalanceCraft is ERC721 {
     using Strings for uint256;
-    using Strings for int96;
+    using Strings for uint8;
 
     uint256 public currentTokenId = 0;
 
@@ -27,14 +27,7 @@ contract BalanceCraft is ERC721 {
         GrandMaster
     }
 
-    constructor() ERC721("BalanceCraft", "BCR") {
-        owner = msg.sender;
-    }
-
-    modifier onlyOwner() {
-        require(msg.sender == owner, "BalanceCraft: No permission");
-        _;
-    }
+    constructor() ERC721("BalanceCraft", "BCR") {}
 
     /// @notice Withdraw the SuperToken funds from the contract
     /// @dev Only the owner can call this function
@@ -48,13 +41,13 @@ contract BalanceCraft is ERC721 {
             currentTokenId++;
         }
     }
-    function withdraw(uint26 _amount) external {
+    function withdraw(uint256 _amount) external {
         require(
             depositsByAddress[msg.sender] >= _amount,
             "BalanceCraft: Insufficient funds"
         );
         depositsByAddress[msg.sender] -= _amount;
-        payable(owner).transfer(_amount);
+        payable(msg.sender).transfer(_amount);
     }
 
     /// @notice Get the URI for a token
@@ -83,7 +76,7 @@ contract BalanceCraft is ERC721 {
             memory description = "Unleash your financial powers with BalanceCraft collection. These in-game items showcase your ever-evolving powers, level, all while you send eth to the contract.";
 
         // Get the level of the user
-        Levels level = _getLevel(totalDeposited);
+        uint8 level = _getLevel(totalDeposited);
         string memory levelString = _levelToString(level);
         string memory imageURI = _getImageUriForLevel(level);
 
@@ -106,9 +99,9 @@ contract BalanceCraft is ERC721 {
             '{"trait_type": "Level", "value": ',
             level.toString(),
             "},",
-            '{"trait_type": "Rank", "value": ',
+            '{"trait_type": "Rank", "value": "',
             levelString,
-            "}",
+            '"}',
             "]",
             "}"
         );
@@ -125,38 +118,38 @@ contract BalanceCraft is ERC721 {
     /// @notice Internal function to determine the level based on the deposited amount
     /// @param amount The amount deposited by the user
     /// @return The level of the user
-    function _getLevel(uint256 amount) internal pure returns (Levels) {
-        if (amount >= 0 && amount < 15000 wei) {
-            return Levels.Bronze;
-        } else if (amount >= 15000 wei && amount < 30000 wei) {
-            return Levels.Silver;
-        } else if (amount >= 30000 wei && amount < 45000 wei) {
-            return Levels.Gold;
-        } else if (amount >= 45000 wei && amount < 60000 wei) {
-            return Levels.Platinum;
-        } else if (amount >= 60000 wei && amount < 75000 wei) {
-            return Levels.Diamond;
-        } else if (amount >= 75000 wei && amount < 90000 wei) {
-            return Levels.Master;
+    function _getLevel(uint256 amount) internal pure returns (uint8) {
+        if (amount >= 0 ether && amount < 0.1 ether) {
+            return 0;
+        } else if (amount >= 0.1 ether && amount < 0.2 ether) {
+            return 1;
+        } else if (amount >= 0.2 ether && amount < 0.3 ether) {
+            return 2;
+        } else if (amount >= 0.3 ether && amount < 0.4 ether) {
+            return 3;
+        } else if (amount >= 0.4 ether && amount < 0.6 ether) {
+            return 4;
+        } else if (amount >= 0.6 ether && amount < 0.9 ether) {
+            return 5;
         } else {
-            return Levels.GrandMaster;
+            return 6;
         }
     }
 
     function _levelToString(
-        Levels level
+        uint8 _level
     ) internal pure returns (string memory) {
-        if (level == Levels.Bronze) {
+        if (_level == 0) {
             return "Bronze";
-        } else if (level == Levels.Silver) {
+        } else if (_level == 1) {
             return "Silver";
-        } else if (level == Levels.Gold) {
+        } else if (_level == 2) {
             return "Gold";
-        } else if (level == Levels.Platinum) {
+        } else if (_level == 3) {
             return "Platinum";
-        } else if (level == Levels.Diamond) {
+        } else if (_level == 4) {
             return "Diamond";
-        } else if (level == Levels.Master) {
+        } else if (_level == 5) {
             return "Master";
         } else {
             return "GrandMaster";
@@ -164,7 +157,7 @@ contract BalanceCraft is ERC721 {
     }
 
     function _getImageUriForLevel(
-        Levels _level
+        uint8 _level
     ) internal pure returns (string memory) {
         return "";
     }
