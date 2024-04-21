@@ -1,48 +1,40 @@
-# minimal-hardhat-boilerplate
+# Balance Craft
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts with balances.
+BalanceCraft is a groundbreaking NFT (Non-Fungible Token) platform where users can mint unique digital assets by sending Ethereum to the contract. Each transaction triggers the creation of a personalized NFT for the user, with attributes dynamically adjusted based on the amount of ETH deposited. As users accumulate ETH over time, their NFTs evolve, unlocking prestigious levels and ranks such as bronze, gold, and diamond.
 
-> Recommended to use Node.js v18+ and npm v8+
+## Features
 
-Try running some of the following tasks:
+- Mint unique NFTs by sending ETH to the contract
+- Evolving NFTs based on accumulated ETH, unlocking prestigious ranks
+- Withdraw funds anytime
+- Dynamic attributes based on the amount of ETH deposited
 
-```shell
+### Getting Started
+
+```bash
+
 npm install
 
-# Set/Read/Remove hardhat config variables
-# npx hardhat vars set API_KEY
-# npx hardhat vars get API_KEY
-# npx hardhat vars DELETE API_KEY
-# npx hardhat vars list
-
-# set PRIVATE_KEY
-npx hardhat vars set PRIVATE_KEY
-
-
-# starts local node
-npx hardhat node
-
-# compile contracts
+# Compile the contracts
 npx hardhat compile
 
-# deploy contract defined in tasks on specified network
-npx hardhat deploy --network localhost
+# Set your private key
+npx hardhat vars set PRIVATE_KEY
 
-# deploy contract in scripts/deploy.ts on specified network
-npx hardhat run scripts/deploy.ts --network localhost
-
-# verify contract
-npx hardhat verify --network <deployed network> <deployed contract address> "<constructor1>" "<constructor2>"
-
-# check coverage using solidity-coverage plugin: supports hardhat network only
-npx hardhat coverage --network hardhat
-
-# unit tests including gas usage
-npx hardhat test
-
-# remove all compiled and deployed artifacts
-npx hardhat clean
-
-# show help
-npx hardhat help
+# Deploy the contract
+npx hardhat run scripts/deploy.ts --network arbitrumSepolia
 ```
+
+### Usage
+
+Send ETH to the deployed contract address to mint your NFT!. Send between 0 to 1 ETH to mint rank nfts. Your nft attributes will be updated based on the amount of ETH you send. You can withdraw your funds anytime.
+
+For quick demo purposes, Send aribtrum sepolia testnet eth to the address `0xf22e5533157cB4917E7d45e0ee78aFaeBCe1bb01` to mint your NFT and see the magic happen.
+
+## Safety
+
+This project is a proof of concept and should not be used in a production environment. The code has not been audited and is not safe to use with real funds.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
