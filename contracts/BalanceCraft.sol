@@ -5,9 +5,9 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/Base64.sol";
 
-/// @title SuperUnlockable - Stream to Unlock In-Game Items with ever-evolving Levels
+/// @title BalanceCraft - Send ETH, mint unique NFTs with ever-evolving levels based on the amount of ETH sent to the contract
 /// @author Salman Dev
-/// @notice This contract allows users to mint in-game items with ever-evolving levels while they stream SuperTokens
+/// @notice This contract allows users to send ETH to mint unique NFTs with ever-evolving levels based on the amount of ETH sent.
 /// @dev All function calls are currently implemented without side effects
 contract BalanceCraft is ERC721 {
     using Strings for uint256;
@@ -17,20 +17,10 @@ contract BalanceCraft is ERC721 {
 
     mapping(address => uint256) public depositsByAddress;
 
-    enum Levels {
-        Bronze,
-        Silver,
-        Gold,
-        Platinum,
-        Diamond,
-        Master,
-        GrandMaster
-    }
-
     constructor() ERC721("BalanceCraft", "BCR") {}
 
-    /// @notice Withdraw the SuperToken funds from the contract
-    /// @dev Only the owner can call this function
+    /// @notice This function gets executed when the contract receives ETH
+    /// @dev This function will mint a new NFT for the sender based on the amount of ETH sent.
     receive() external payable {
         // check if sender already has a deposit, if so update the deposit else create a new deposit and mint nft
         if (depositsByAddress[msg.sender] > 0) {
@@ -61,7 +51,7 @@ contract BalanceCraft is ERC721 {
 
     /// @notice Prepare and return the URI for a token(internal)
     /// @param _tokenId The ID of the token
-    /// @dev This function will return token the URI in json based on the flow opened by the token owner
+    /// @dev This function will return token the URI in json based on the amount deposited by the token owner
     function _getTokenURI(
         uint256 _tokenId
     ) internal view returns (string memory) {
